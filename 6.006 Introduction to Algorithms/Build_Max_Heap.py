@@ -13,16 +13,15 @@ def build_max_heap(arr) :
     arr : unordered list of element.
     """
     n = len(arr)
-    if n % 2 != 1:
-        return "Number of elements in your list should be odd in order to \
-visualize it as a heap."
     for i in reversed(range(n//2)) :
         arr = max_heapify(arr, i, n)
     return arr
 
 #For Debugging
-#print(build_max_heap([1, 2, 3, 4, 5, 6, 7, 8, 9]))
-
+if __name__ == "__main__" :
+    arr = build_max_heap([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    print(arr)
+    print(type(arr))
 
 """
 INPUT
