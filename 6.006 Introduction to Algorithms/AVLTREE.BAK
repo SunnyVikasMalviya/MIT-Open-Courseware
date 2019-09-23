@@ -1,3 +1,7 @@
+/*
+This code is partially working.
+*/
+
 #include<stdio.h>
 #include<conio.h>
 #include<process.h>
@@ -52,6 +56,9 @@ struct node* insert(struct node* node, int a)
 }
 struct node* check_avl(struct node* node)
 {
+	node->lch = (node->left == NULL)?-1:node->left->height;
+	node->rch = (node->right == NULL)?-1:node->right->height;
+
 	node->height = (node->lch >= node->rch)?(node->lch+1):(node->rch+1);
 	if(node->lch-node->rch == 2 || node->rch-node->lch == 2)
 		node = fix_avl(node);
@@ -73,7 +80,6 @@ struct node* fix_avl(struct node* node)
 	}
 	return node;
 }
-//Fix heights
 struct node* left_rotate(struct node* node)
 {
 	struct node* temp = (struct node*)malloc(sizeof(struct node));
@@ -85,6 +91,7 @@ struct node* left_rotate(struct node* node)
 	temp->height = (temp->rch>=temp->lch)?temp->rch+1:temp->lch+1;
 	node->right->lch = temp->height;
 	node->right->left = temp;
+	node->right->height = (node->right->lch>=node->right->rch)?node->right->lch+1:node->right->rch+1;
 	return node->right;
 }
 struct node* right_rotate(struct node* node)
@@ -98,6 +105,7 @@ struct node* right_rotate(struct node* node)
 	temp->height = (temp->rch>=temp->lch)?temp->rch+1:temp->lch+1;
 	node->left->rch = temp->height;
 	node->left->right = temp;
+	node->left->height = (node->left->lch>=node->left->rch)?node->left->lch+1:node->left->rch+1;
 	return node->left;
 }
 struct node* deletenode(struct node* node, int a)
@@ -129,7 +137,7 @@ struct node* deletenode(struct node* node, int a)
 		node->data = suc->data;
 		node->right = deletenode(node->right, suc->data);
 	}
-	return node;
+	return check_avl(node);
 }
 void main()
 {
@@ -145,7 +153,7 @@ void main()
 	//root = insert(root, a);
 	do
 	{
-	printf("Select choice:\n1.Insertion\n2.Deletion\n3.Display\n4.Successor\n5.Predecessor\n6.Exit\nPress 7 for hidden operation ;)\n>>");
+	printf("Select choice:\n1.Insertion\n2.Deletion\n3.Display\n4.Successor\n5.Predecessor\n6.Exit\n7.Totally New Tree\nPress 8 for hidden operation ;)\n>>");
 	scanf("%d", &ch);
 	switch(ch)
 	{
@@ -174,7 +182,9 @@ void main()
 			pre = find_pre_or_suc(root, a, 'p');
 			printf("%d", pre->data);
 			break;
-		case 7:printf("\nINSERT MULTIPLE\n");
+		case 7: root = NULL;
+			break;
+		case 8:	printf("\nINSERT MULTIPLE\n");
 			printf("Enter number of nodes to insert:");
 			scanf("%d", &n);
 			printf("Enter %d numbers:(Press enter after every number)", n);

@@ -1,3 +1,31 @@
+/*
+Problem :
+This code is partially working.
+The insert() is working till 9 nodes.
+Try inserting 10 through 100.
+
+How it works:
+Data Structure
+AVL Tree with nodes and each node containing the following data:
+1. data : Input value of the node.
+2. *left : Pointer to the left child.
+3. *right : Pointer to the right child.
+4. height : Height of the node in the tree.
+5. lch : Height of the left child. (Left Child Height).
+6. rch : Height of the right child. (Right Child Height).
+Inserting Algorithm
+1. Takes input.
+2. Creates a new node if not already present,Does nothing if node is already present.
+3. Inserts inputs like binary search tree with also maintaining the height, lch and rch data members of the data structure.
+4. check_avl()
+   After inserting each node, the parent node is called and it is checked whether it maintains the AVL property or not.
+   This is checked by comparing the lch and rch of the node. If the differnce between lch and rch is abs(2), the node violates the AVL property.
+5. fix_avl()
+   If the AVL property is violated, the fix_avl() is called to fix the avl property using left_rotation() and right_rotation().
+6. The result is displayed as inorder, preorder and postorder traversals of the tree.
+
+*/
+
 #include<stdio.h>
 #include<conio.h>
 #include<process.h>
@@ -52,6 +80,9 @@ struct node* insert(struct node* node, int a)
 }
 struct node* check_avl(struct node* node)
 {
+	node->lch = (node->left == NULL)?-1:node->left->height;
+	node->rch = (node->right == NULL)?-1:node->right->height;
+
 	node->height = (node->lch >= node->rch)?(node->lch+1):(node->rch+1);
 	if(node->lch-node->rch == 2 || node->rch-node->lch == 2)
 		node = fix_avl(node);
@@ -73,7 +104,6 @@ struct node* fix_avl(struct node* node)
 	}
 	return node;
 }
-//Fix heights
 struct node* left_rotate(struct node* node)
 {
 	struct node* temp = (struct node*)malloc(sizeof(struct node));
@@ -131,7 +161,7 @@ struct node* deletenode(struct node* node, int a)
 		node->data = suc->data;
 		node->right = deletenode(node->right, suc->data);
 	}
-	return node;
+	return check_avl(node);
 }
 void main()
 {
@@ -147,7 +177,7 @@ void main()
 	//root = insert(root, a);
 	do
 	{
-	printf("Select choice:\n1.Insertion\n2.Deletion\n3.Display\n4.Successor\n5.Predecessor\n6.Exit\nPress 7 for hidden operation ;)\n>>");
+	printf("Select choice:\n1.Insertion\n2.Deletion\n3.Display\n4.Successor\n5.Predecessor\n6.Exit\n7.Totally New Tree\nPress 8 for hidden operation ;)\n>>");
 	scanf("%d", &ch);
 	switch(ch)
 	{
@@ -176,7 +206,9 @@ void main()
 			pre = find_pre_or_suc(root, a, 'p');
 			printf("%d", pre->data);
 			break;
-		case 7:printf("\nINSERT MULTIPLE\n");
+		case 7: root = NULL;
+			break;
+		case 8:	printf("\nINSERT MULTIPLE\n");
 			printf("Enter number of nodes to insert:");
 			scanf("%d", &n);
 			printf("Enter %d numbers:(Press enter after every number)", n);
