@@ -28,11 +28,13 @@ class FormGraph(object):
         return self.edges
     def adj_list(self):
         print(self)
+    def get_adj(self):
+        return self.adj
     def __str__(self):
         result = ''
         for x in self.adj:
             result = result + '\'' + str(x) + '\' -> ' + str(self.adj[x]) + '\n'
-        return result[:-1] 
+        return result[:-1]
 
 if __name__ == '__main__':
     g = FormGraph("Graph 1")
